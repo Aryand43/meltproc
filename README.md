@@ -18,4 +18,10 @@ Minimal end-to-end pipeline for meltpool runs:
   - Reads: `Data/<run_dir>/Aligned/frames.uint16.memmap` and `meta.csv`
   - Trains `CNNMLPRegressor` to predict a chosen target column (e.g. `meltpoolTemp`, `meltpoolSize`)
 
+## Model Architecture
+
+![Model Architecture](diagrams/meltproc-diagram.png)
+
+CNN feature extractor produces a 512-d embedding, followed by an MLP regression head to predict meltpool targets.
+
 `Data/` is expected to be local-only (not committed).
