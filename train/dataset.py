@@ -23,12 +23,15 @@ def aligned_paths(run_dir: Path) -> AlignedRunPaths:
     )
 
 
-def load_targets(meta_csv: Path, target_column: str) -> np.ndarray:
+def load_targets(meta_csv: Path, target_columns: list[str]) -> np.ndarray:
     with meta_csv.open("r", newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        if reader.fieldnames is None or target_column not in reader.fieldnames:
-            raise ValueError(f"Missing target column {target_column!r} in {meta_csv}")
-        ys = [float(row[target_column]) for row in reader]
+        if reader.fieldnames is None:
+            raise ValueError(f"{meta_csv} missing header")
+        for col in target_columns:
+            if col not in reader.fieldnames:
+                raise ValueError(f"Missing target column {col!r} in {meta_csv}")
+        ys = [[float(row[col]) for col in target_columns] for row in reader]
     return np.asarray(ys, dtype=np.float32)
 
 
@@ -41,6 +44,8 @@ class MemmapTemperatureDataset(Dataset):
         scale: float = 1.0,
     ) -> None:
         self.frames_memmap = frames_memmap
+        if targets.ndim != 2:
+            raise ValueError(f"targets must be (N, D), got shape {targets.shape}")
         self.targets = targets
         self.h, self.w = shape_hw
         self.scale = float(scale)
@@ -57,6 +62,6 @@ class MemmapTemperatureDataset(Dataset):
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
         x = np.asarray(self._mm[idx], dtype=np.float32) * self.scale
         x = torch.from_numpy(x).unsqueeze(0)
-        y = torch.tensor([self.targets[idx]], dtype=torch.float32)
+        y = torch.from_numpy(np.asarray(self.targets[idx], dtype=np.float32))
         return x, y
 

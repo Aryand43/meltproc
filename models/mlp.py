@@ -8,7 +8,7 @@ class MLPRegressionHead(nn.Module):
         self.net = nn.Sequential(
             nn.Linear(512, 128),
             nn.ReLU(),
-            nn.Linear(128, 1),
+            nn.Linear(128, 2),
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
