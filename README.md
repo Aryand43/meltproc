@@ -17,6 +17,7 @@ Minimal end-to-end pipeline for meltpool runs:
 - **Training (minimal)**: `train/train.py`
   - Reads: `Data/<run_dir>/Aligned/frames.uint16.memmap` and `meta.csv`
   - Trains `CNNMLPRegressor` to predict a chosen target column (e.g. `meltpoolTemp`, `meltpoolSize`)
+  - Expected behavior (multitask, normalized targets): `total_loss = temp_loss + size_loss` should generally decrease over epochs; per-task losses may drop at different rates. RMSEs are computed after denormalization and should trend downward but can be noisy due to split variance and task interference.
 
 ## Model Architecture
 

@@ -50,7 +50,7 @@ def _append_training_log(
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", type=str, required=True)
-    ap.add_argument("--epochs", type=int, default=1)
+    ap.add_argument("--epochs", type=int, default=25)
     ap.add_argument("--batch-size", type=int, default=16)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--val-frac", type=float, default=0.1)
