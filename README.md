@@ -20,7 +20,7 @@ Minimal end-to-end pipeline for meltpool runs:
 
 ## Model Architecture
 
-![Model Architecture](diagrams/meltproc-diagram.png)
+![Model Architecture](Diagrams/meltproc-diagram.png)
 
 CNN feature extractor produces a 512-d embedding, followed by an MLP regression head to predict meltpool targets.
 
